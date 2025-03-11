@@ -1,0 +1,64 @@
+# macOS system files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Xcode project user-specific files
+*.xcuserstate
+*.xcscmblueprint
+xcuserdata/
+
+# Swift Package Manager
+/.swiftpm/
+/Package.resolved
+
+# Cocoapods
+Pods/
+*.xcworkspace
+Podfile.lock
+
+# Carthage
+Carthage/Build/
+
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/
+fastlane/test_output/
+
+# Xcode Derived Data & Archives
+DerivedData/
+*.xcarchive
+
+# Temporary files
+*.swp
+*.lock
+*.tmp
+
+# Build & Cache
+build/
+*.o
+*.d
+*.dia
+*.pyc
+*.pyo
+*.out
+*.log
+*.log.*
+*.swp
+*.out
+*.err
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+
+# Ignore Env Files
+.env
+.env.local
+.env.development
+.env.production
+.env.test
+.env.*.local
+
+# Ignore Firebase Crashlytics
+firebase_app_id_file.json
