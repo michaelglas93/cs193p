@@ -1,99 +1,78 @@
-//
-//  ContentView.swift
-//  cs193p
-//
-//  Created by Glas, Michael on 11.03.25.
-//
-
 import SwiftUI
 
 struct ContentView: View {
-    let emojis = ["👻", "🎃", "🕷️", "😈","🐉","🐇","🐆","🐰"];
-    //let emojis: [String] = ["👻", "🎃", "🕷️", "😈"]; means the same
-
-    @State var cardCount: Int = 4
+    @State private var emojis: [String] = []
+    
+    let halloweenEmojis = ["👻", "👻", "🎃", "🎃", "🕷️", "🕷️", "😈", "😈", "💀", "💀"]
+    let animalEmojis = ["🐉", "🐉", "🐇", "🐇", "🐆", "🐆", "🐰", "🐰", "🦊", "🦊", "🐸", "🐸"]
+    let natureEmojis = ["🐻", "🐻", "🐻‍❄️", "🐻‍❄️", "🌲", "🌲", "🍂", "🍂", "🏝️", "🏝️", "🌻", "🌻", "⛰️", "⛰️"]
+    
     var body: some View {
-        ScrollView{
-            cards
-            Spacer()
-            cardCountAdjusters
-        }
-        .padding()
-    }
-    
-    var cardCountAdjusters: some View {
-        HStack{
-            cardRemover
-            Spacer()
-            cardAdder
-        }
-        .imageScale(.large)
-        .font(.largeTitle)
-    }
-    
-    func cardCountAdjuster(by offset: Int, symbol: String) -> some View {
-        Button(
-            action: {
-                    cardCount += offset
+        VStack {
+            Text("Memorize!")
+                .font(.largeTitle)
+                .padding(.top)
             
-            },
-            label: {
+            ScrollView {
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 80))]) {
+                    ForEach(emojis.indices, id: \.self) { index in
+                        CardView(content: emojis[index])
+                            .aspectRatio(2/3, contentMode: .fit)
+                    }
+                }
+                .foregroundColor(.orange)
+                .padding()
+            }
+            
+            Spacer()
+            
+            HStack {
+                themeButton(title: "Halloween", symbol: "moon.fill", theme: halloweenEmojis)
+                themeButton(title: "Animals", symbol: "pawprint.fill", theme: animalEmojis)
+                themeButton(title: "Nature", symbol: "leaf.fill", theme: natureEmojis)
+            }
+            .padding(.bottom)
+        }
+    }
+    
+    func themeButton(title: String, symbol: String, theme: [String]) -> some View {
+        Button(action: {
+            emojis = theme.shuffled()
+        }) {
+            VStack {
                 Image(systemName: symbol)
-            
-            })
-        .disabled(cardCount + offset < 0 || cardCount + offset > emojis.count)
-        
-    }
-    
-    var cardRemover: some View{
-        cardCountAdjuster(by: -1, symbol: "rectangle.stack.badge.minus.fill")
-    }
-    
-    var cardAdder: some View{
-        cardCountAdjuster(by: 1, symbol: "rectangle.stack.badge.plus.fill")
-    }
-    
-    
-    var cards: some View{
-        LazyVGrid(columns: [GridItem(.adaptive(minimum: 120))]){
-            ForEach(0..<cardCount, id: \.self){ index in
-                CardView(content: emojis[index]).aspectRatio(2/3, contentMode: .fit)
+                    .font(.largeTitle)
+                Text(title)
+                    .font(.caption)
             }
         }
-        .foregroundColor(.orange)
+        .buttonStyle(.bordered)
+        .padding(.horizontal)
     }
 }
 
-
-
-
 struct CardView: View {
-    var content: String;
-    @State var isFaceUp = true;
+    var content: String
+    @State private var isFaceUp = false
     
     var body: some View {
-        ZStack{
+        ZStack {
             let base = RoundedRectangle(cornerRadius: 12)
-            Group{
+            
+            if isFaceUp {
                 base.fill(.white)
                 base.strokeBorder(lineWidth: 2)
-                Text(content).font(.largeTitle)
+                Text(content)
+                    .font(.largeTitle)
+            } else {
+                base.fill()
             }
-            .opacity(isFaceUp ? 1 : 0)
-            base.fill().opacity(isFaceUp ? 0 : 1)
-
-            
-        }.onTapGesture {
-            //isFaceUp = !isFaceUp - it is the same
+        }
+        .onTapGesture {
             isFaceUp.toggle()
         }
     }
 }
-
-
-
-
-
 
 #Preview {
     ContentView()
